@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.wolfram.alpha.WAEngine;
+
 import java.util.UUID;
 
 /**
@@ -34,6 +36,8 @@ public class EquationFragment extends Fragment {
 
         EquationFragment fragment = new EquationFragment();
         fragment.setArguments(args);
+
+       // WAEngine news = new WAEngine();
 
         return fragment;
     }

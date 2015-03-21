@@ -121,6 +121,8 @@ public class CameraFragment extends Fragment{
         }
     }
 
+    //below this useless
+
     public Bitmap getPic(int x, int y, int width, int height) {
         System.gc();
         Bitmap b = null;
