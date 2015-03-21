@@ -25,19 +25,20 @@ import java.util.ArrayList;
  * Created by Sam on 3/21/2015.
  */
 public class MainFragment extends Fragment {
-    public Button mScan;
+    public static final String EXTRA_SEND_FAKE="com.vandyapps.android.grapher.sendfake";
+    public static final String EXTRA_SEND_REAL="com.vandyapps.android.grapher.sendreal";
+    public Button mScan, mSearch;
     public EditText mEdit;
     public boolean sub;
     public TextView eqn;
     public String wholeEqn, fake;
-    public ArrayList<Integer> carrots;
+   // public ArrayList<Integer> carrots;
 
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.main_fragment, parent, false);
         sub = false;
-        carrots = new ArrayList<>();
+        //carrots = new ArrayList<>();
 
 
 
@@ -52,6 +53,17 @@ public class MainFragment extends Fragment {
 
         eqn = (TextView)v.findViewById(R.id.equation);
         eqn.setTextColor(Color.BLACK);
+
+        mSearch = (Button)v.findViewById(R.id.search_button);
+        mSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), EquationActivity.class);
+                i.putExtra(EXTRA_SEND_FAKE, fake);
+                i.putExtra(EXTRA_SEND_REAL, wholeEqn);
+                startActivity(i);
+            }
+        });
 
         mEdit = (EditText)v.findViewById(R.id.equation_box);
         //mEdit.setText(Html.fromHtml("hey"+"<sup><small>"+"there"+"</small></sup>"));
