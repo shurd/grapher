@@ -86,6 +86,9 @@ public class EquationFragment extends Fragment {
         fakeEqn = getArguments().getString(EXTRA_FAKE);
 
 
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        checkBTState();
+
         setHasOptionsMenu(true);
     }
 
@@ -215,6 +218,9 @@ public class EquationFragment extends Fragment {
             errorExit("Fatal Error", msg);
         }
     }
+
+
+    ////////////////////////////
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
