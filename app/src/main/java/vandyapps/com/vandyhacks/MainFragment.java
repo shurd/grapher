@@ -56,14 +56,14 @@ public class MainFragment extends Fragment {
         });
 
 
-        mScan = (Button)v.findViewById(R.id.scan_button);
+       /* mScan = (Button)v.findViewById(R.id.scan_button);
         mScan.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Intent i = new Intent(getActivity(), CameraActivity.class);
                 startActivity(i);
             }
-        });
+        });*/
 
         eqn = (TextView)v.findViewById(R.id.equation);
         eqn.setTextColor(Color.BLACK);

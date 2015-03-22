@@ -1,5 +1,8 @@
 package vandyapps.com.vandyhacks;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,7 +32,9 @@ import com.wolfram.alpha.WAQuery;
 import com.wolfram.alpha.WAQueryResult;
 import com.wolfram.alpha.WASubpod;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.UUID;
 
 /**
@@ -37,6 +42,18 @@ import java.util.UUID;
  */
 public class EquationFragment extends Fragment {
 
+
+    private static final int REQUEST_ENABLE_BT = 1;
+    private BluetoothAdapter btAdapter = null;
+    private BluetoothSocket btSocket = null;
+    private OutputStream outStream = null;
+
+    // Well known SPP UUID
+    private static final UUID MY_UUID =
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+    // Insert your server's MAC address
+    private static String address = "20:14:12:17:09:32";
     public String wholeEqn, fakeEqn, imgurl;
     public TextView mEqn;
     public Button mSearch;
@@ -76,13 +93,16 @@ public class EquationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.equation_activity, parent, false);
 
+
+
         mEqn = (TextView)v.findViewById(R.id.equation);
         mEqn.setText(Html.fromHtml(fakeEqn));
         mSearch = (Button)v.findViewById(R.id.query);
         mSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new YourTask().execute();
+                //new YourTask().execute();
+                executeSend();
             }
         });
         mImage = (ImageView)v.findViewById(R.id.image);
@@ -95,7 +115,134 @@ public class EquationFragment extends Fragment {
 
         //new DownloadImageTask(mImage).execute(imgurl);
 
+        new YourTask().execute();
+
         return v;
+    }
+
+    public void executeSend(){
+        for(int i = 0; i<wholeEqn.length();i++){
+            int number = i;
+            if(wholeEqn.charAt(i)=='x'){
+                if(wholeEqn.charAt(i+1)=='^'){
+                    for(i=1; i<(int)wholeEqn.charAt(i+2);i++){
+                        number*=number;
+                    }
+                }
+                if()
+            }
+        }
+
+        String value = "";
+        if(value.length()==3){
+            sendData(value.charAt(0)+"");
+            sendData(value.charAt(1)+"");
+            sendData(value.charAt(2)+"");
+        } else if(value.length()==2){
+            sendData("0");
+            sendData(value.charAt(0)+"");
+            sendData(value.charAt(1)+"");
+        } else if(value.length()==1){
+            sendData("0");
+            sendData("0");
+            sendData(value.charAt(0)+"");
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        BluetoothDevice device = btAdapter.getRemoteDevice(address);
+
+        try {
+            btSocket = device.createRfcommSocketToServiceRecord(MY_UUID);
+        } catch (IOException e) {
+            errorExit("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
+        }
+
+        btAdapter.cancelDiscovery();
+
+
+        try {
+            btSocket.connect();
+            //Log.d(TAG, "...Connection established and data link opened...");
+        } catch (IOException e) {
+            try {
+                btSocket.close();
+            } catch (IOException e2) {
+                errorExit("Fatal Error", "In onResume() and unable to close socket during connection failure" + e2.getMessage() + ".");
+            }
+        }
+
+       // Log.d(TAG, "...Creating Socket...");
+
+        try {
+            outStream = btSocket.getOutputStream();
+        } catch (IOException e) {
+            errorExit("Fatal Error", "In onResume() and output stream creation failed:" + e.getMessage() + ".");
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        //Log.d(TAG, "...In onPause()...");
+
+        if (outStream != null) {
+            try {
+                outStream.flush();
+            } catch (IOException e) {
+                errorExit("Fatal Error", "In onPause() and failed to flush output stream: " + e.getMessage() + ".");
+            }
+        }
+
+        try     {
+            btSocket.close();
+        } catch (IOException e2) {
+            errorExit("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
+        }
+    }
+
+    private void checkBTState() {
+
+        if(btAdapter==null) {
+            errorExit("Fatal Error", "Bluetooth Not supported. Aborting.");
+        } else {
+            if (btAdapter.isEnabled()) {
+                //Log.d(TAG, "...Bluetooth is enabled...");
+            } else {
+                //Prompt user to turn on Bluetooth
+                Intent enableBtIntent = new Intent(btAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
+        }
+    }
+
+    private void errorExit(String title, String message){
+        //Toast msg = Toast.makeText(getBaseContext(),
+          //      title + " - " + message, Toast.LENGTH_SHORT);
+        //msg.show();
+        getActivity().finish();
+    }
+
+    private void sendData(String message) {
+
+        byte[] msgBuffer = message.getBytes();
+
+        //Log.d(TAG, "...Sending data: " + message + "...");
+
+        try {
+            outStream.write(msgBuffer);
+        } catch (IOException e) {
+            String msg = "In onResume() and an exception occurred during write: " + e.getMessage();
+            if (address.equals("00:00:00:00:00:00"))
+                msg = msg + ".\n\nUpdate your server address from 00:00:00:00:00:00 to the correct address on line 37 in the java code";
+            msg = msg + ".\n\nCheck that the SPP UUID: " + MY_UUID.toString() + " exists on server.\n\n";
+
+            errorExit("Fatal Error", msg);
+        }
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
