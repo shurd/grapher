@@ -1,5 +1,6 @@
 package vandyapps.com.vandyhacks;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.hardware.Camera;
@@ -10,12 +11,15 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -32,6 +36,7 @@ public class MainFragment extends Fragment {
     public boolean sub;
     public TextView eqn;
     public String wholeEqn, fake;
+    public LinearLayout mLayout;
    // public ArrayList<Integer> carrots;
 
     @Override
@@ -40,6 +45,15 @@ public class MainFragment extends Fragment {
         sub = false;
         //carrots = new ArrayList<>();
 
+        mLayout = (LinearLayout)v.findViewById(R.id.click_to_hide);
+        mLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm=(InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getActivity().getWindow().getCurrentFocus().getWindowToken(),0);
+                return false;
+            }
+        });
 
 
         mScan = (Button)v.findViewById(R.id.scan_button);

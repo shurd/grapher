@@ -1,17 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="#00CED1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
     <TextView
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:textColor="#ff516c1b"
+        android:textSize="70dp"
+        android:textColor="#000000"
         android:id="@+id/equation"/>
-    <Button
-        android:layout_width="wrap_content"
+    <TextView
+        android:textSize="35dp"
+        android:textColor="#000000"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:text="Plot"/>
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="450dp"
+        android:layout_height="300dp"
+        />
+    <TextView
+        android:textSize="35dp"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:text="Root"/>
+    <TextView
+        android:textSize="20dp"
+        android:id="@+id/roots"
+        android:textColor="#000000"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Root"/>
+    <TextView
+        android:textSize="35dp"
+        android:textColor="#000000"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Derivative"/>
+    <TextView
+        android:textSize="20dp"
+        android:id="@+id/derivatives"
+        android:textColor="#000000"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Derivative"/>
+    <TextView
+
+        android:textSize="35dp"
+        android:textColor="#000000"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Integral"/>
+    <TextView
+        android:textSize="20dp"
+        android:id="@+id/integral"
+        android:textColor="#000000"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Integral"
+        android:layout_marginBottom="15dp"/>
+
+    <Button
+        android:background="@drawable/newbutton"
+        android:textColor="#FFE4C4"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:textSize="25dp"
         android:text="query"
         android:id="@+id/query"/>
 
