@@ -102,7 +102,7 @@ public class EquationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //new YourTask().execute();
-                executeSend();
+               sendData("1");
             }
         });
         mImage = (ImageView)v.findViewById(R.id.image);
@@ -118,35 +118,6 @@ public class EquationFragment extends Fragment {
         new YourTask().execute();
 
         return v;
-    }
-
-    public void executeSend(){
-        for(int i = 0; i<wholeEqn.length();i++){
-            int number = i;
-            if(wholeEqn.charAt(i)=='x'){
-                if(wholeEqn.charAt(i+1)=='^'){
-                    for(i=1; i<(int)wholeEqn.charAt(i+2);i++){
-                        number*=number;
-                    }
-                }
-                if()
-            }
-        }
-
-        String value = "";
-        if(value.length()==3){
-            sendData(value.charAt(0)+"");
-            sendData(value.charAt(1)+"");
-            sendData(value.charAt(2)+"");
-        } else if(value.length()==2){
-            sendData("0");
-            sendData(value.charAt(0)+"");
-            sendData(value.charAt(1)+"");
-        } else if(value.length()==1){
-            sendData("0");
-            sendData("0");
-            sendData(value.charAt(0)+"");
-        }
     }
 
     @Override
